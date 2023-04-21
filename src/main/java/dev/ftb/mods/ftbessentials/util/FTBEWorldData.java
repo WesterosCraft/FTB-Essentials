@@ -1,5 +1,6 @@
 package dev.ftb.mods.ftbessentials.util;
 
+import dev.ftb.mods.ftbessentials.config.FTBEConfig;
 import dev.ftb.mods.ftblibrary.snbt.SNBTCompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
@@ -55,7 +56,9 @@ public class FTBEWorldData {
 		SNBTCompoundTag wm = new SNBTCompoundTag();
 
 		for (Map.Entry<String, TeleportPos> h : warps.entrySet()) {
-			wm.put(h.getKey(), h.getValue().write());
+			String key = h.getKey();
+			if (!FTBEConfig.WARPS_CASE_SENSITIVE.get()) key = key.toLowerCase();
+			wm.put(key, h.getValue().write());
 		}
 
 		tag.put("warps", wm);
@@ -69,6 +72,7 @@ public class FTBEWorldData {
 		SNBTCompoundTag w = tag.getCompound("warps");
 
 		for (String key : w.getAllKeys()) {
+			if (!FTBEConfig.WARPS_CASE_SENSITIVE.get()) key = key.toLowerCase();
 			warps.put(key, new TeleportPos(w.getCompound(key)));
 		}
 	}
