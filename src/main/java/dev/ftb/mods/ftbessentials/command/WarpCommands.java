@@ -57,7 +57,8 @@ public class WarpCommands {
 
 	public static int warp(ServerPlayer player, String name) {
 		FTBEPlayerData data = FTBEPlayerData.get(player);
-		TeleportPos pos = FTBEWorldData.instance.warps.get(name.toLowerCase());
+		if (!FTBEConfig.WARPS_CASE_SENSITIVE.get()) name = name.toLowerCase();
+		TeleportPos pos = FTBEWorldData.instance.warps.get(name);
 
 		if (pos == null) {
 			player.displayClientMessage(new TextComponent("Warp not found!"), false);
@@ -68,14 +69,16 @@ public class WarpCommands {
 	}
 
 	public static int setwarp(ServerPlayer player, String name) {
-		FTBEWorldData.instance.warps.put(name.toLowerCase(), new TeleportPos(player));
+		if (!FTBEConfig.WARPS_CASE_SENSITIVE.get()) name = name.toLowerCase();
+		FTBEWorldData.instance.warps.put(name, new TeleportPos(player));
 		FTBEWorldData.instance.save();
 		player.displayClientMessage(new TextComponent("Warp set!"), false);
 		return 1;
 	}
 
 	public static int delwarp(ServerPlayer player, String name) {
-		if (FTBEWorldData.instance.warps.remove(name.toLowerCase()) != null) {
+		if (!FTBEConfig.WARPS_CASE_SENSITIVE.get()) name = name.toLowerCase();
+		if (FTBEWorldData.instance.warps.remove(name) != null) {
 			FTBEWorldData.instance.save();
 			player.displayClientMessage(new TextComponent("Warp deleted!"), false);
 			return 1;
