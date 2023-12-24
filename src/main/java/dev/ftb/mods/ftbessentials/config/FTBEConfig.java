@@ -79,4 +79,6 @@ public interface FTBEConfig {
 			.comment("Allows users to access their ender chest, as well as admins to manage other players' ender chests.");
 	ToggleableConfig LEADERBOARD = new ToggleableConfig(MISC, "leaderboard")
 			.comment("Allows users to view player leaderboard stats.");
+	ToggleableConfig GM = new ToggleableConfig(MISC, "gm")
+			.comment("Allows users to switch gamemode.");
 }
