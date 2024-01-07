@@ -1,38 +1,37 @@
 package dev.ftb.mods.ftbessentials.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.ftb.mods.ftbessentials.config.FTBEConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
-import java.util.Arrays;
-import java.util.Collection;
-
 
 public class GamemodeCommands {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		if (FTBEConfig.GM.isEnabled()) {
-			dispatcher.register(Commands.literal("gm")
-					.requires(FTBEConfig.GM.enabledAndOp())
-					.executes(context -> gamemode(context.getSource().getPlayerOrException(), ""))
-					.then(Commands.argument("gamemode", StringArgumentType.greedyString())
-							.suggests((context, builder) -> SharedSuggestionProvider.suggest(getGamemodeSuggestions(), builder))
-							.executes(context -> gamemode(context.getSource().getPlayerOrException(), StringArgumentType.getString(context, "gamemode"))))
+			dispatcher.register(Commands.literal("gmc")
+					.requires(FTBEConfig.GM)
+					.executes(context -> gamemode(context.getSource().getPlayerOrException(), "creative"))
+			);
+
+			dispatcher.register(Commands.literal("gma")
+					.requires(FTBEConfig.GM)
+					.executes(context -> gamemode(context.getSource().getPlayerOrException(), "adventure"))
+			);
+
+			dispatcher.register(Commands.literal("gms")
+					.requires(FTBEConfig.GM)
+					.executes(context -> gamemode(context.getSource().getPlayerOrException(), "survival"))
+			);
+
+			dispatcher.register(Commands.literal("gmsp")
+					.requires(FTBEConfig.GM)
+					.executes(context -> gamemode(context.getSource().getPlayerOrException(), "spectator"))
 			);
 
 		}
-	}
-	public static Collection<String> getGamemodeSuggestions() {
-		return Arrays.asList(
-				GameType.SURVIVAL.getName(),
-				GameType.CREATIVE.getName(),
-				GameType.ADVENTURE.getName(),
-				GameType.SPECTATOR.getName()
-		);
 	}
 
 	// Function to change the gamemode
@@ -46,12 +45,12 @@ public class GamemodeCommands {
 		};
 
 		if (player.gameMode.getGameModeForPlayer() == targetMode) {
-			player.displayClientMessage(new TextComponent("You are already in that gamemode."), false);
+			player.displayClientMessage(new TextComponent("You are already in " + targetMode + " mode."), false);
 			return 0;
 		}
 
 		player.setGameMode(targetMode);
-		player.displayClientMessage(new TextComponent("Your gamemode has been updated."), false);
+		player.displayClientMessage(new TextComponent("Your are now in " + targetMode + " mode."), false);
 
 		return 1;
 	}
