@@ -19,6 +19,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 
 /**
  * @author LatvianModder
@@ -115,6 +116,11 @@ public class CheatCommands {
 	public static int fly(ServerPlayer player) {
 		var data = FTBEPlayerData.get(player);
 		var abilities = player.getAbilities();
+
+		if (player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR) {
+			player.displayClientMessage(new TextComponent("Cannot disable flight in spectator mode."), true);
+			return 0;
+		}
 
 		if (data.fly) {
 			data.fly = false;
