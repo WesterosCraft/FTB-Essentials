@@ -1,6 +1,7 @@
 package dev.ftb.mods.ftbessentials.config;
 
 import dev.ftb.mods.ftbessentials.FTBEssentials;
+import dev.ftb.mods.ftblibrary.snbt.config.BaseValue;
 import dev.ftb.mods.ftblibrary.snbt.config.IntValue;
 import dev.ftb.mods.ftblibrary.snbt.config.SNBTConfig;
 
@@ -25,6 +26,7 @@ public interface FTBEConfig {
 	// warp
 	TimedCommandConfig WARP = new TimedCommandConfig(TELEPORTATION, "warp", 10, 0)
 			.comment("Allows admins to create 'warps', which are fixed points in the world that users may teleport to using /warp");
+	BaseValue<Boolean> WARPS_CASE_SENSITIVE = WARP.config.getBoolean("case_sensitive", false).comment("Allow case sensitive warp names");
 	// home
 	TimedCommandConfig HOME = new TimedCommandConfig(TELEPORTATION, "home", 10, 0)
 			.comment("Allows users to set 'homes', which they can then freely teleport to by using /home afterwards");
@@ -79,4 +81,6 @@ public interface FTBEConfig {
 			.comment("Allows users to access their ender chest, as well as admins to manage other players' ender chests.");
 	ToggleableConfig LEADERBOARD = new ToggleableConfig(MISC, "leaderboard")
 			.comment("Allows users to view player leaderboard stats.");
+	ToggleableConfig GM = new ToggleableConfig(MISC, "gm")
+			.comment("Allows users to switch gamemode.");
 }
